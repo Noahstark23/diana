@@ -8,6 +8,17 @@ body {
     font-weight: 400;
 }
 
+/* Modern Login & Dashboard */
+.login-page {
+    background: #f0f3f5;
+}
+
+.login-container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 h1,
 h2, 
 h3, 

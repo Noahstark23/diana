@@ -1,14 +1,20 @@
-// Simple login script
-// Hardcoded credentials for demonstration
+// Simple login script with admin role
+const creds = [
+  {username: 'user', password: 'password', role: 'user'},
+  {username: 'admin', password: 'adminpass', role: 'admin'}
+];
+
 const loginForm = document.getElementById('login-form');
 if (loginForm) {
   loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const user = document.getElementById('username').value;
     const pass = document.getElementById('password').value;
-    if (user === 'user' && pass === 'password') {
-      localStorage.setItem('loggedInUser', user);
-      window.location.href = 'index.html';
+    const found = creds.find(c => c.username === user && c.password === pass);
+    if (found) {
+      localStorage.setItem('loggedInUser', found.username);
+      localStorage.setItem('role', found.role);
+      window.location.href = found.role === 'admin' ? 'admin.html' : 'dashboard.html';
     } else {
       alert('Invalid credentials');
     }
@@ -26,6 +32,7 @@ function updateLoginLink() {
     link.addEventListener('click', function(e) {
       e.preventDefault();
       localStorage.removeItem('loggedInUser');
+      localStorage.removeItem('role');
       window.location.reload();
     });
   } else {
@@ -34,4 +41,21 @@ function updateLoginLink() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', updateLoginLink);
+function updateDashboardLink() {
+  const dash = document.getElementById('dashboard-link');
+  if (!dash) return;
+  const user = localStorage.getItem('loggedInUser');
+  const role = localStorage.getItem('role');
+  if (user) {
+    dash.style.display = 'inline-block';
+    dash.textContent = role === 'admin' ? 'Admin Panel' : 'Dashboard';
+    dash.href = role === 'admin' ? 'admin.html' : 'dashboard.html';
+  } else {
+    dash.style.display = 'none';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateLoginLink();
+  updateDashboardLink();
+});
